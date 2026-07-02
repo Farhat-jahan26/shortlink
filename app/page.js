@@ -1,65 +1,88 @@
-import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    <main style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
+    }}>
+
+      {/* Logo / Title */}
+      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <h1 style={{
+          fontSize: '56px',
+          fontWeight: '800',
+          background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          marginBottom: '16px'
+        }}>
+          🔗 ShortLink
+        </h1>
+        <p style={{ fontSize: '20px', color: '#94a3b8', maxWidth: '480px' }}>
+          Convert long URLs into short, shareable links — and track every click.
+        </p>
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Link href="/signup" style={{
+          padding: '14px 32px',
+          background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+          color: '#fff',
+          borderRadius: '10px',
+          textDecoration: 'none',
+          fontWeight: '600',
+          fontSize: '16px'
+        }}>
+          Get Started Free
+        </Link>
+        <Link href="/login" style={{
+          padding: '14px 32px',
+          background: 'transparent',
+          color: '#6366f1',
+          border: '2px solid #6366f1',
+          borderRadius: '10px',
+          textDecoration: 'none',
+          fontWeight: '600',
+          fontSize: '16px'
+        }}>
+          Login
+        </Link>
+      </div>
+
+      {/* Features */}
+      <div style={{
+        display: 'flex',
+        gap: '24px',
+        marginTop: '64px',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+      }}>
+        {[
+          { icon: '⚡', title: 'Instant Shortening', desc: 'Generate short links in seconds' },
+          { icon: '📊', title: 'Click Analytics', desc: 'Track every click in real-time' },
+          { icon: '🔒', title: 'Secure & Private', desc: 'Your links, only your dashboard' },
+        ].map((feature) => (
+          <div key={feature.title} style={{
+            background: '#1e293b',
+            border: '1px solid #334155',
+            borderRadius: '12px',
+            padding: '24px',
+            textAlign: 'center',
+            width: '200px'
+          }}>
+            <div style={{ fontSize: '32px', marginBottom: '12px' }}>{feature.icon}</div>
+            <h3 style={{ color: '#f1f5f9', marginBottom: '8px', fontSize: '16px' }}>{feature.title}</h3>
+            <p style={{ color: '#64748b', fontSize: '14px' }}>{feature.desc}</p>
+          </div>
+        ))}
+      </div>
+    </main>
+  )
 }
