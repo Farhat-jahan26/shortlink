@@ -69,15 +69,20 @@ export default function Dashboard() {
     setSubmitting(true)
     setMessage({ text: '', type: '' })
 
-    const response = await fetch('/api/shorten', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        original_url: originalUrl.trim(),
-        custom_code: customCode.trim() || null,
-        user_id: user.id
-      })
+  // Session token lo
+  const { data: { session } } = await supabase.auth.getSession()
+
+  const response = await fetch('/api/shorten', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session.access_token}`
+    },
+    body: JSON.stringify({
+      original_url: originalUrl.trim(),
+      custom_code: customCode.trim() || null,
     })
+  })
 
     const result = await response.json()
 
