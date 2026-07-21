@@ -62,40 +62,62 @@ export default function Dashboard() {
 
   // ─── Shorten URL ──────────────────────────────────────────
   const handleShorten = async () => {
-    if (!originalUrl.trim()) {
-      setMessage({ text: 'Please enter a URL', type: 'error' })
-      return
-    }
-    setSubmitting(true)
-    setMessage({ text: '', type: '' })
-
-  // Session token lo
-  const { data: { session } } = await supabase.auth.getSession()
-
-  const response = await fetch('/api/shorten', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${session.access_token}`
-    },
-    body: JSON.stringify({
-      original_url: originalUrl.trim(),
-      custom_code: customCode.trim() || null,
-    })
-  })
-
-    const result = await response.json()
-
-    if (!response.ok) {
-      setMessage({ text: result.error, type: 'error' })
-    } else {
-      setMessage({ text: '✅ Short link created!', type: 'success' })
-      setOriginalUrl('')
-      setCustomCode('')
-      fetchLinks(user.id)
-    }
-    setSubmitting(false)
+  if (!originalUrl.trim()) {
+    setMessage({ text: 'Please enter a URL', type: 'error' })
+    return
   }
+
+  setSubmitting(true)
+  setMessage({ text: '', type: '' })
+
+  // URL format check
+  try {
+    new URL(originalUrl.trim())
+  } catch {
+    setMessage({ text: 'Please enter a valid URL (include https://)', type: 'error' })
+    setSubmitting(false)
+    return
+  }
+
+  // Short code generate 
+  const short_code = customCode.trim() || Math.random().toString(36).substring(2, 8)
+
+  // Check duplicate
+  const { data: existing } = await supabase
+    .from('links')
+    .select('id')
+    .eq('short_code', short_code)
+    .single()
+
+  if (existing) {
+    setMessage({ text: 'This custom code is already taken. Try another!', type: 'error' })
+    setSubmitting(false)
+    return
+  }
+
+  // (API route bypass)
+  const { data, error } = await supabase
+    .from('links')
+    .insert({
+      user_id: user.id,
+      original_url: originalUrl.trim(),
+      short_code,
+      clicks: 0
+    })
+    .select()
+    .single()
+
+  if (error) {
+    setMessage({ text: error.message, type: 'error' })
+  } else {
+    setMessage({ text: '✅ Short link created!', type: 'success' })
+    setOriginalUrl('')
+    setCustomCode('')
+    fetchLinks(user.id)
+  }
+
+  setSubmitting(false)
+}
 
   // ─── Edit Link ────────────────────────────────────────────
   const handleEdit = async () => {
