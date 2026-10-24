@@ -91,6 +91,14 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               style={inputStyle}
             />
+            <div style={{ textAlign: 'right', marginTop: '8px' }}>
+              <Link
+                href="/forgot-password"
+                style={{ color: '#6366f1', textDecoration: 'none', fontSize: '14px' }}
+              >
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           {message && (
